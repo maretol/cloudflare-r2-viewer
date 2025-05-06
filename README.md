@@ -1,23 +1,16 @@
-# README
+# Cloudflare R2 Viewer
 
-## About
+Cloudflare R2に置いた静的ファイル（主に画像）を便利に管理するためのアプリケーション
 
-Wails template for Nextjs with app router. For more details [Nextjs-Template](https://github.com/thisisvk-in/wails-template-nextjs-app-router).
+wailsを利用し、Go+Next.js(TypeScript)で作成している
 
-## Start
+## About wails
 
-To use this template follow below command
+https://wails.io
 
-```bash
-wails init -n "Your Project Name" -t https://github.com/thisisvk-in/wails-template-nextjs-app-router
-```
+## Memo wails commands
 
-## Live Development
-
-To run in live development mode, run `wails dev` in the project directory. In another terminal, go into the `frontend`
-directory and run `npm run dev`. The frontend dev server will run on http://localhost:3000. Connect to this in your
-browser and connect to your application.
-
-## Building
-
-To build a redistributable, production mode package, use `wails build`. Static asset directory will be `frontend/dist`.
+- Go呼び出しのインターフェース作成
+    - `wails generate module`
+- Dev環境起動
+    - `wails dev`
