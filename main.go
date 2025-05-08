@@ -25,63 +25,64 @@ func main() {
 	// Create application with options
 	err := wails.Run(&options.App{
 		Title:             "cloudflare-r2-viewer",
-		Width:             1024,
-		Height:            768,
+		Width:             1200,
+		Height:            800,
 		MinWidth:          1024,
 		MinHeight:         768,
-		MaxWidth:          1280,
-		MaxHeight:         800,
+		MaxWidth:          1920,
+		MaxHeight:         1080,
 		DisableResize:     false,
 		Fullscreen:        false,
 		Frameless:         false,
 		StartHidden:       false,
 		HideWindowOnClose: false,
 		BackgroundColour:  &options.RGBA{R: 255, G: 255, B: 255, A: 255},
-		AssetServer:       &assetserver.Options{
+		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},
-		Menu:              nil,
-		Logger:            nil,
-		LogLevel:          logger.DEBUG,
-		OnStartup:         app.startup,
-		OnDomReady:        app.domReady,
-		OnBeforeClose:     app.beforeClose,
-		OnShutdown:        app.shutdown,
-		WindowStartState:  options.Normal,
-		Bind: []interface{}{
+		Menu:             nil,
+		Logger:           nil,
+		LogLevel:         logger.DEBUG,
+		OnStartup:        app.startup,
+		OnDomReady:       app.domReady,
+		OnBeforeClose:    app.beforeClose,
+		OnShutdown:       app.shutdown,
+		WindowStartState: options.Normal,
+		Bind: []any{
 			app,
 		},
 		// Windows platform specific options
-		Windows: &windows.Options{
-			WebviewIsTransparent: false,
-			WindowIsTranslucent:  false,
-			DisableWindowIcon:    false,
-			// DisableFramelessWindowDecorations: false,
-			WebviewUserDataPath: "",
-			ZoomFactor: 1.0,
-		},
+		Windows: windowsConfig(),
 		// Mac platform specific options
-		Mac: &mac.Options{
-			TitleBar: &mac.TitleBar{
-				TitlebarAppearsTransparent: true,
-				HideTitle:                  false,
-				HideTitleBar:               false,
-				FullSizeContent:            false,
-				UseToolbar:                 false,
-				HideToolbarSeparator:       true,
-			},
-			Appearance:           mac.NSAppearanceNameDarkAqua,
-			WebviewIsTransparent: true,
-			WindowIsTranslucent:  true,
-			About: &mac.AboutInfo{
-				Title:   "cloudflare-r2-viewer",
-				Message: "",
-				Icon:    icon,
-			},
-		},
+		Mac: macConfig(),
 	})
 
 	if err != nil {
 		log.Fatal(err)
+	}
+}
+
+func windowsConfig() *windows.Options {
+	return &windows.Options{
+		WebviewIsTransparent: false,
+		WindowIsTranslucent:  false,
+		DisableWindowIcon:    false,
+		// DisableFramelessWindowDecorations: false,
+		WebviewUserDataPath: "",
+		ZoomFactor:          1.0,
+	}
+}
+
+func macConfig() *mac.Options {
+	return &mac.Options{
+		TitleBar:             nil,
+		Appearance:           mac.NSAppearanceNameDarkAqua,
+		WebviewIsTransparent: true,
+		WindowIsTranslucent:  true,
+		About: &mac.AboutInfo{
+			Title:   "cloudflare-r2-viewer",
+			Message: "",
+			Icon:    icon,
+		},
 	}
 }
