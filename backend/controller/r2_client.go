@@ -1,11 +1,13 @@
-package backend
+package controller
 
 import (
+	"cloudflare-r2-viewer/backend/entity"
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
 	"log"
+	"strings"
 
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/credentials"
@@ -21,6 +23,11 @@ type r2client struct {
 }
 
 type R2Client interface {
+	SetAccountID(ctx context.Context, accountID string)
+	SetAccessKeyID(ctx context.Context, accessKeyID string)
+	SetSecretAccessKey(ctx context.Context, secretAccessKey string)
+	GetBuckets(ctx context.Context) ([]string, error)
+	GetObjects(ctx context.Context, bucketName string) ([]*entity.Object, error)
 }
 
 func NewR2Client(ctx context.Context, accountID, accessKeyID, secretAccessKey string) R2Client {
@@ -80,7 +87,7 @@ func (r *r2client) GetBuckets(ctx context.Context) ([]string, error) {
 	return bucketNames, nil
 }
 
-func (r *r2client) GetObjects(ctx context.Context, bucketName string) ([]string, error) {
+func (r *r2client) GetObjects(ctx context.Context, bucketName string) ([]*entity.Object, error) {
 	objects, err := r.client.ListObjectsV2(ctx, &s3.ListObjectsV2Input{
 		Bucket: &bucketName,
 	})
@@ -88,10 +95,17 @@ func (r *r2client) GetObjects(ctx context.Context, bucketName string) ([]string,
 		return nil, errors.Wrap(err, "failed to list objects")
 	}
 
-	objectKeys := make([]string, len(objects.Contents))
+	ents := make([]*entity.Object, len(objects.Contents))
 	for i, object := range objects.Contents {
-		objectKeys[i] = *object.Key
+		path := *object.Key
+		splitPath := strings.Split(path, "/")
+		name := splitPath[len(splitPath)-1]
+		ents[i] = &entity.Object{
+			Path: path,
+			Name: name,
+			Size: *object.Size,
+		}
 	}
 
-	return objectKeys, nil
+	return ents, nil
 }
