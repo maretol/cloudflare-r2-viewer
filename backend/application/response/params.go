@@ -5,10 +5,10 @@ type BucketList struct {
 }
 
 type ObjectList struct {
-	Objects []Object `json:"objects"` // オブジェクトの配列
+	Objects []Obj `json:"objects"` // オブジェクトの配列
 }
 
-type Object struct {
+type Obj struct {
 	Name       string `json:"name"`        // ファイル名
 	Path       string `json:"path"`        // パス
 	Size       int64  `json:"size"`        // サイズ

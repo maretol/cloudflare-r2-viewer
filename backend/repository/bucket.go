@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"cloudflare-r2-viewer/backend/customerror"
 	"cloudflare-r2-viewer/backend/entity"
 	"cloudflare-r2-viewer/backend/repository/data"
 	"encoding/json"
@@ -76,7 +77,7 @@ func (b *bucket) GetBucketInfo(bucketName string) (*entity.Bucket, error) {
 			}, nil
 		}
 	}
-	return nil, ErrBucketConfigNotFound
+	return nil, customerror.ErrBucketConfigNotFound
 }
 
 func (b *bucket) SetBucketInfo(bucket *entity.Bucket) error {

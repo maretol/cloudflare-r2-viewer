@@ -1,6 +1,7 @@
 package main
 
 import (
+	"cloudflare-r2-viewer/backend"
 	"embed"
 	"log"
 
@@ -21,6 +22,7 @@ var icon []byte
 func main() {
 	// Create an instance of the app structure
 	app := NewApp()
+	viewerHandler := backend.NewViewerHandler()
 
 	// Create application with options
 	err := wails.Run(&options.App{
@@ -50,6 +52,7 @@ func main() {
 		WindowStartState: options.Normal,
 		Bind: []any{
 			app,
+			viewerHandler,
 		},
 		// Windows platform specific options
 		Windows: windowsConfig(),

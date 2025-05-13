@@ -19,6 +19,7 @@ type Viewer interface {
 	GetBucketList(ctx context.Context) ([]*entity.Bucket, error)
 	GetObjectList(ctx context.Context, bucketName string) ([]*entity.Object, error)
 	SetBucketInfo(ctx context.Context, bucketName string, description, publishDomain string) error
+	GetBucketInfo(ctx context.Context, bucketName string) (*entity.Bucket, error)
 	FetchThumbnail(ctx context.Context, bucketName, objectPath string) (*[]byte, error)
 	FetchImage(ctx context.Context, bucketName, objectPath string) (*[]byte, error)
 }
@@ -70,6 +71,15 @@ func (v *viewer) GetObjectList(ctx context.Context, bucketName string) ([]*entit
 	}
 
 	return objects, nil
+}
+
+func (v *viewer) GetBucketInfo(ctx context.Context, bucketName string) (*entity.Bucket, error) {
+	bucketInfo, err := v.bucketRepository.GetBucketInfo(bucketName)
+	if err != nil {
+		return nil, err
+	}
+
+	return bucketInfo, nil
 }
 
 func (v *viewer) SetBucketInfo(ctx context.Context, bucketName string, description, publishDomain string) error {
